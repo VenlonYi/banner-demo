@@ -35,20 +35,38 @@
     bottom: 10%;
     transform: translateX(-50%);
 }
-.dots >div {
+.dots > span {
     transition: all .5s;
     margin: 0 10px;
     display: inline-block;
     width: 20px;
     height: 20px;
     border-radius: 10px;
-    background-color: rgba(73, 51, 51, 0.708);
+    background-color: rgba(15, 214, 228, 0.614);
+    cursor: pointer;
 }
 
 .dots .active {
  width: 40px;
 }
 
-/* .dots > div > span {
-   
-} */
+.to-left, .to-right {
+    position:absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(204, 95, 40, 0.55);
+    width: 30px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: rgb(218, 217, 217);
+    font-size: 24px;
+    cursor: pointer;
+
+}
+.to-left {
+    left: 0;
+}
+.to-right {
+    right: 0;
+}
