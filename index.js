@@ -99,6 +99,20 @@
                     el.setAttribute('class', '')
                 }
             })
+        },
+        /* 节流 */
+        throttle(fn, delay = 100) {
+            let timer = null
+        
+            return function () {
+                if (timer) {
+                    return
+                }
+                timer = setTimeout(() => {
+                    fn.apply(this, arguments)
+                    timer = null
+                }, delay)
+            }
         }
     }
     /* 创建方法,初始化函数 */
@@ -187,20 +201,34 @@
             }
         }
         // 左右按钮
-        fn.$('.to-right').onclick = () => {
-            fn.bannerPlay(wrapPlayNode, bannerListLength)
-        }
-        fn.$('.to-left').onclick = () => {
-            if (currentPlayIndex < 1) {
-                currentPlayIndex = 5
-                fn.picMove({
-                    el: wrapPlayNode,
-                    transition: 'none',
-                    bannerLength: bannerListLength,
-                    currentPlayIndex: currentPlayIndex
-                })
-                // 延时0毫秒，把刚刚去掉的过渡加上的同时，再进行移动
-                setTimeout(() => {
+        fn.$('.to-right').onclick = fn.throttle(() => {
+                fn.bannerPlay(wrapPlayNode, bannerListLength)
+            }
+        )
+        
+        fn.$('.to-left').onclick = 
+        fn.throttle(() => {
+                if (currentPlayIndex < 1) {
+                    currentPlayIndex = 5
+                    fn.picMove({
+                        el: wrapPlayNode,
+                        transition: 'none',
+                        bannerLength: bannerListLength,
+                        currentPlayIndex: currentPlayIndex
+                    })
+                    // 延时0毫秒，把刚刚去掉的过渡加上的同时，再进行移动
+                    setTimeout(() => {
+                        currentPlayIndex--
+                        fn.picMove({
+                            el: wrapPlayNode,
+                            transition: 'all .3s',
+                            bannerLength: bannerListLength,
+                            currentPlayIndex
+                        })
+    
+                    }, 0)
+    
+                } else {
                     currentPlayIndex--
                     fn.picMove({
                         el: wrapPlayNode,
@@ -208,19 +236,10 @@
                         bannerLength: bannerListLength,
                         currentPlayIndex
                     })
-
-                }, 0)
-
-            } else {
-                currentPlayIndex--
-                fn.picMove({
-                    el: wrapPlayNode,
-                    transition: 'all .3s',
-                    bannerLength: bannerListLength,
-                    currentPlayIndex
-                })
+                }
             }
-        }
+        )
+        
     }
 
     window.LightBanner = LightBanner
